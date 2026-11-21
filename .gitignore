@@ -4,3 +4,7 @@ node_modules/
 .pglite/
 .env
 .env.local
+
+# next
+next-env.d.ts
+*.tsbuildinfo

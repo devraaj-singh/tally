@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+/* Tailwind v4: theme is configured in CSS (no tailwind.config.ts needed). */
+@theme inline {
+  --font-sans: var(--font-inter), Arial, system-ui, sans-serif;
+  --font-display: var(--font-sora), Arial, system-ui, sans-serif;
+
+  --color-accent-50: #ecfdf5;
+  --color-accent-100: #d1fae5;
+  --color-accent-500: #10b981;
+  --color-accent-600: #059669;
+  --color-accent-700: #047857;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), Arial, system-ui, sans-serif;
+}
