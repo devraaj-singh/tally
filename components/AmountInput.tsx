@@ -1,4 +1,12 @@
-export default function AmountInput({ disabled }: { disabled?: boolean }) {
+export default function AmountInput({
+  value,
+  onChange,
+  disabled,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  disabled?: boolean;
+}) {
   return (
     <label className="block">
       <span className="text-xs font-medium uppercase tracking-wide text-slate-500">Amount</span>
@@ -6,6 +14,8 @@ export default function AmountInput({ disabled }: { disabled?: boolean }) {
         <span className="font-display text-3xl text-slate-400">$</span>
         <input
           name="amount"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
           inputMode="decimal"
           autoComplete="off"
           placeholder="0.00"

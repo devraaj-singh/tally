@@ -31,29 +31,18 @@ export default async function Home() {
         </p>
       </header>
 
-      <AddTransactionForm categories={categories.map((c) => c.name)} today={today} />
+      <AddTransactionForm categories={categories.map((c) => c.name)} />
 
       <section className="mt-8">
-        {txs.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-slate-200 px-6 py-10 text-center">
-            <p className="font-display text-lg font-semibold text-slate-700">
-              Log your first transaction
-            </p>
-            <p className="mt-1 text-sm text-slate-500">
-              Add an amount and a tag above to start tracking this month.
-            </p>
-          </div>
-        ) : (
-          <TransactionList
-            items={txs.map((t) => ({
-              id: t.id,
-              amount: formatCents(t.amountCents),
-              category: (t.categoryId && names.get(t.categoryId)) || "Uncategorized",
-              note: t.note,
-              date: t.date,
-            }))}
-          />
-        )}
+        <TransactionList
+          items={txs.map((t) => ({
+            id: t.id,
+            amount: formatCents(t.amountCents),
+            category: (t.categoryId && names.get(t.categoryId)) || "Uncategorized",
+            note: t.note,
+            date: t.date,
+          }))}
+        />
       </section>
     </main>
   );
