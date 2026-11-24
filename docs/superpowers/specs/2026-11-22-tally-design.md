@@ -4,6 +4,8 @@
 **Date:** 2026-11-22
 **For:** Devraaj (single user), replacing the deleted BudgetWise/Cash-Counter.
 
+> **SCOPE SIMPLIFIED (2026-11-24, user-directed):** "make it a lot simpler — just log transactions." The app is now a SINGLE screen: a small month total + an add form + a transaction list. Categories survive only as a **simple tag** typed/picked on the add form (new tags auto-created); there is NO categories-manager screen, NO dashboard/charts, NO bottom-nav, NO settings screen. The simple shared password is kept; cloud DB + phone-install kept. Everything below describing multiple screens / dashboard is superseded by this note.
+
 ## Intent & why
 A lean, good-looking spending tracker you can open on your phone to log what you
 spent in a few seconds and instantly see where your money is going, by category.
