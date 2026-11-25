@@ -6,7 +6,7 @@ export type LogTransactionInput = {
   amount: string;
   categoryName: string;
   note?: string;
-  date?: string; // "YYYY-MM-DD", defaults to today
+  date?: string; // "YYYY-MM-DD" local day; the add form always supplies it. Fallback is server-UTC only.
 };
 
 /** Next-free core of the "add" flow: validate, resolve/create the category tag, insert. */
