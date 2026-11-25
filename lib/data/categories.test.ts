@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { installTestDb } from "./testdb.ts";
 
 const { client } = await installTestDb();
-const { createCategory, listCategories, deleteCategory, ensureUncategorized, updateCategory } =
+const { createCategory, listCategories, deleteCategory, ensureUncategorized, updateCategory, resolveCategoryByName } =
   await import("./categories.ts");
 const { createTransaction, listTransactions } = await import("./transactions.ts");
 after(() => client.close());
@@ -36,4 +36,28 @@ test("deleteCategory reassigns transactions to Uncategorized", async () => {
     assert.ok(found, "transaction still exists");
     assert.equal(found.categoryId, uncat);
   }
+});
+
+test("resolveCategoryByName creates a new category", async () => {
+  const before = (await listCategories()).length;
+  const r = await resolveCategoryByName("Gadgets");
+  assert.ok("id" in r);
+  const all = await listCategories();
+  assert.equal(all.length, before + 1);
+  assert.equal(all.find((c) => c.id === r.id)?.name, "Gadgets");
+});
+
+test("resolveCategoryByName reuses existing name ignoring case/whitespace", async () => {
+  const c = await createCategory({ name: "Snacks" });
+  const before = (await listCategories()).length;
+  const r = await resolveCategoryByName("  sNaCkS ");
+  assert.ok("id" in r);
+  assert.equal(r.id, c.id);
+  assert.equal((await listCategories()).length, before);
+});
+
+test("resolveCategoryByName rejects empty names", async () => {
+  const before = (await listCategories()).length;
+  for (const n of ["", "   "]) assert.ok("error" in (await resolveCategoryByName(n)));
+  assert.equal((await listCategories()).length, before);
 });

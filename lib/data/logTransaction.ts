@@ -1,5 +1,5 @@
 import { parseAmountToCents } from "../money.ts";
-import { createCategory, listCategories } from "./categories.ts";
+import { resolveCategoryByName } from "./categories.ts";
 import { createTransaction } from "./transactions.ts";
 
 export type LogTransactionInput = {
@@ -16,13 +16,8 @@ export async function logTransaction(
   const parsed = parseAmountToCents(input.amount);
   if ("error" in parsed) return { error: parsed.error };
 
-  const name = input.categoryName.trim();
-  if (name === "") return { error: "Pick or type a category" };
-
-  const existing = (await listCategories()).find(
-    (c) => c.name.trim().toLowerCase() === name.toLowerCase(),
-  );
-  const category = existing ?? (await createCategory({ name }));
+  const category = await resolveCategoryByName(input.categoryName);
+  if ("error" in category) return { error: category.error };
 
   const note = input.note?.trim();
   await createTransaction({

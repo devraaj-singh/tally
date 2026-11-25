@@ -19,6 +19,7 @@ export async function addTransaction(_prev: AddState, formData: FormData): Promi
   });
   if ("error" in result) return { error: result.error };
   revalidatePath("/");
+  revalidatePath("/history");
   return { ok: Date.now() };
 }
 
@@ -26,4 +27,5 @@ export async function removeTransaction(id: string): Promise<void> {
   if (!(await isAuthorized())) return;
   await deleteTransaction(id);
   revalidatePath("/");
+  revalidatePath("/history");
 }

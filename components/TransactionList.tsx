@@ -1,15 +1,27 @@
 "use client";
 
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import EditTransactionSheet from "./EditTransactionSheet";
 import TransactionRow, { type TransactionRowData } from "./TransactionRow";
 
-export default function TransactionList({ items }: { items: TransactionRowData[] }) {
+export default function TransactionList({
+  items,
+  categories,
+  empty,
+}: {
+  items: TransactionRowData[];
+  categories: string[];
+  empty?: { title: string; hint: string };
+}) {
+  const [editing, setEditing] = useState<TransactionRowData | null>(null);
   return (
     <div>
+      <EditTransactionSheet tx={editing} categories={categories} onClose={() => setEditing(null)} />
       <ul className="space-y-3">
         <AnimatePresence initial={false}>
           {items.map((tx) => (
-            <TransactionRow key={tx.id} tx={tx} />
+            <TransactionRow key={tx.id} tx={tx} onEdit={setEditing} />
           ))}
         </AnimatePresence>
       </ul>
@@ -22,10 +34,10 @@ export default function TransactionList({ items }: { items: TransactionRowData[]
             className="rounded-3xl border border-dashed border-slate-200 px-6 py-10 text-center"
           >
             <p className="font-display text-lg font-semibold text-slate-700">
-              Log your first transaction
+              {empty?.title ?? "Log your first transaction"}
             </p>
             <p className="mt-1 text-sm text-slate-500">
-              Add an amount and a tag above to start tracking this month.
+              {empty?.hint ?? "Add an amount and a tag above to start tracking this month."}
             </p>
           </motion.div>
         )}

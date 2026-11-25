@@ -67,3 +67,19 @@ export async function deleteCategory(id: string): Promise<void> {
     .where(eq(transactions.categoryId, id));
   await db.delete(categories).where(eq(categories.id, id));
 }
+
+/**
+ * Resolve a user-typed tag to a category: trim + case-insensitive match against
+ * existing categories, else create it. Shared by the add and edit flows.
+ */
+export async function resolveCategoryByName(
+  name: string,
+): Promise<{ id: string } | { error: string }> {
+  const trimmed = name.trim();
+  if (trimmed === "") return { error: "Pick or type a category" };
+  const existing = (await listCategories()).find(
+    (c) => c.name.trim().toLowerCase() === trimmed.toLowerCase(),
+  );
+  const category = existing ?? (await createCategory({ name: trimmed }));
+  return { id: category.id };
+}
