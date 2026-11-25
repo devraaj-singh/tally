@@ -20,14 +20,15 @@ export async function editTransaction(_prev: EditState, formData: FormData): Pro
     const parsed = parseAmountToCents(str(formData.get("amount")));
     if ("error" in parsed) return { error: parsed.error };
 
-    const category = await resolveCategoryByName(str(formData.get("category")));
-    if ("error" in category) return { error: category.error };
-
     const date = str(formData.get("date")).trim();
     if (!DAY.test(date) || Number.isNaN(Date.parse(`${date}T00:00:00Z`))) {
       return { error: "Pick a valid date" };
     }
     const note = str(formData.get("note")).trim();
+
+    // Resolve/create the category last so invalid input never leaves an orphan tag.
+    const category = await resolveCategoryByName(str(formData.get("category")));
+    if ("error" in category) return { error: category.error };
 
     const row = await updateTransaction(id, {
       amountCents: parsed.cents,

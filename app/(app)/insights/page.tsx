@@ -24,7 +24,11 @@ export default async function InsightsPage({
   const [rows, total] = await Promise.all([breakdownByCategory(month), monthlyTotalCents(month)]);
   const shown = rows.filter((r) => r.totalCents > 0);
   const categorized = shown.reduce((s, r) => s + r.totalCents, 0);
-  const uncategorized = Math.max(0, total - categorized);
+  const leftover = Math.max(0, total - categorized);
+  // Fold null-category spend into the real "Uncategorized" row if present, so only one bar shows.
+  const realUncatIdx = shown.findIndex((r) => r.name === "Uncategorized");
+  const bars = shown.map((r, i) => (i === realUncatIdx ? { ...r, totalCents: r.totalCents + leftover } : r));
+  const uncategorized = realUncatIdx >= 0 ? 0 : leftover;
   const pct = (cents: number) => (total > 0 ? (cents / total) * 100 : 0);
   const monthLabel = new Date(Date.UTC(Number(month.slice(0, 4)), Number(month.slice(5, 7)) - 1, 1))
     .toLocaleString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
@@ -61,7 +65,7 @@ export default async function InsightsPage({
         </div>
       ) : (
         <ul className="space-y-3">
-          {shown.map((r, i) => (
+          {bars.map((r, i) => (
             <li key={r.categoryId}>
               <CategoryBar
                 href={`/history?${new URLSearchParams({ month, categoryId: r.categoryId }).toString()}`}
@@ -82,7 +86,7 @@ export default async function InsightsPage({
                 amount={formatCents(uncategorized)}
                 percent={pct(uncategorized)}
                 color="#94a3b8"
-                index={shown.length}
+                index={bars.length}
               />
             </li>
           )}

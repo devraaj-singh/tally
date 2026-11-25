@@ -7,6 +7,7 @@ import {
   UNCATEGORIZED_NAME,
   createCategory,
   deleteCategory,
+  ensureUncategorized,
   listCategories,
   updateCategory,
 } from "@/lib/data/categories";
@@ -37,6 +38,10 @@ export async function addCategory(formData: FormData): Promise<CategoryResult> {
       color: str(formData.get("color")),
     });
     if ("error" in parsed) return { error: parsed.error };
+    await ensureUncategorized();
+    if (parsed.name.trim().toLowerCase() === UNCATEGORIZED_NAME.toLowerCase()) {
+      return { error: "That category already exists" };
+    }
     if (await nameTaken(parsed.name)) return { error: "That category already exists" };
     await createCategory(parsed);
   } catch {

@@ -22,8 +22,8 @@ export default async function Home() {
   ).toLocaleString("en-US", { month: "long", year: "numeric" });
 
   return (
-    <main className="mx-auto min-h-dvh max-w-md bg-gradient-to-b from-accent-50/60 to-white px-5 pb-16 pt-10">
-      <header className="mb-8">
+    <main className="mx-auto min-h-dvh max-w-md bg-gradient-to-b from-accent-50/60 to-white px-5 pb-16 pt-6">
+      <header className="mb-6">
         <p className="text-sm font-medium text-slate-500">{monthLabel} &middot; spent</p>
         <p className="font-display text-6xl font-semibold tracking-tight text-slate-900">
           <span className="text-accent-600">$</span>
