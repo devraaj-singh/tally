@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { DEMO_MODE } from "./lib/constants.ts";
+import { DEMO_MODE, missingProductionEnv } from "./lib/constants.ts";
 import { SESSION_COOKIE, isValidSession } from "./lib/auth.ts";
 
 // Paths that never require a session: the login page itself and static assets.
@@ -17,7 +17,13 @@ function isPublicPath(pathname: string): boolean {
 
 export async function middleware(request: NextRequest) {
   // The demo has no password: bypass the gate entirely.
+  // DEMO_MODE is always false in production (see lib/constants.ts).
   if (DEMO_MODE) return NextResponse.next();
+
+  // Production misconfiguration: fail closed at request time (never at build).
+  if (process.env.NEXT_PHASE !== "phase-production-build" && missingProductionEnv().length > 0) {
+    return new NextResponse("Service misconfigured", { status: 503 });
+  }
 
   const { pathname } = request.nextUrl;
   if (isPublicPath(pathname)) return NextResponse.next();
