@@ -11,6 +11,10 @@ function isPublicPath(pathname: string): boolean {
     pathname === "/manifest.webmanifest" ||
     pathname === "/icon" ||
     pathname === "/apple-icon" ||
+    pathname.startsWith("/icons/")
+  );
+    pathname.startsWith("/icons/")
+  );
 }
 
 export async function middleware(request: NextRequest) {
