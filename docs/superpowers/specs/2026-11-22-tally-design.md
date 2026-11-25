@@ -88,6 +88,14 @@ strips back to the core and spends its effort on feeling fast and looking nice.
 └─────────────────────────────┘
 ```
 
+## Known limitations / possible follow-ups (v1, shipped 2026-11-25)
+These were reviewed and consciously deferred — none block daily single-user use:
+- The list + total show the **current month only** (UTC on the server). A transaction back-dated to a previous month saves but won't show in the list; and near month-end midnight the month window can be off by the server's UTC offset. The add form's default date is client-local, so normal same-day logging is correct.
+- A failed delete is silent (no error toast).
+- Rapid double-submit of a brand-new tag could in theory create a duplicate category (no unique constraint on name) — effectively impossible for one phone user.
+- Cosmetic: manifest `background_color` is white (not emerald); empty-state fades in with a 0.25s delay on first load; middleware matcher icon prefixes aren't anchored (no route is exposed).
+- `middleware`→`proxy` is a pending Next 16 rename (works today with a deprecation note).
+
 ## Left to the builder
 - Exact color palette & which display font (Sora vs Space Grotesk) — I'll pick a
   tasteful default; you can react to it.
