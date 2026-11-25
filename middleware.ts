@@ -13,6 +13,8 @@ function isPublicPath(pathname: string): boolean {
     pathname === "/apple-icon" ||
     pathname.startsWith("/icons/")
   );
+}
+
 export async function middleware(request: NextRequest) {
   // The demo has no password: bypass the gate entirely.
   if (DEMO_MODE) return NextResponse.next();
