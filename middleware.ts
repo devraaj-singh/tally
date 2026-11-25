@@ -9,8 +9,8 @@ function isPublicPath(pathname: string): boolean {
     pathname.startsWith("/_next/") ||
     pathname === "/favicon.ico" ||
     pathname === "/manifest.webmanifest" ||
-    pathname.startsWith("/icons/")
-  );
+    pathname === "/icon" ||
+    pathname === "/apple-icon" ||
 }
 
 export async function middleware(request: NextRequest) {
@@ -29,5 +29,5 @@ export async function middleware(request: NextRequest) {
 export const config = {
   // Skip static assets at the matcher level as well, so the middleware
   // does not run for them at all.
-  matcher: ["/((?!_next/static|_next/image|favicon\\.ico|manifest\\.webmanifest|icons/).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon\\.ico|manifest\\.webmanifest|icon|apple-icon|icons/).*)"],
 };
